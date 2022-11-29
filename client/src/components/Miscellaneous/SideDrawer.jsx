@@ -2,6 +2,7 @@ import { Button } from "@chakra-ui/button";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
+import api from "../../config/api";
 import {
   Menu,
   MenuButton,
@@ -105,7 +106,27 @@ function SideDrawer() {
           Authorization: `Bearer ${user.token}`,
         },
       };
-      const { data } = await axios.post(`/api/chat`, { userId }, config);
+
+      //const { data } = await api.post("/api/chat", { userId: userId }, config);
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user.token}`,
+        },
+        body: JSON.stringify({
+          userId: userId,
+        }),
+      };
+
+      const response = await fetch(
+        "http://localhost:5000/api/chat",
+        requestOptions
+      );
+      const data = await response.json();
+
+      console.log(data);
 
       if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);

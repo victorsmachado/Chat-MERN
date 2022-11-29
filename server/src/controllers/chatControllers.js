@@ -7,6 +7,7 @@ const Chat = require("../models/chatModel");
 //@route           POST /api/chat/
 //@access          Protected
 const accessChat = asyncHandler(async (req, res) => {
+  console.log(req);
   const { userId } = req.body;
 
   if (!userId) {
@@ -56,6 +57,7 @@ const accessChat = asyncHandler(async (req, res) => {
 //@route           GET /api/chat/
 //@access          Protected
 const fetchChats = asyncHandler(async (req, res) => {
+  console.log(req.user);
   try {
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
       .populate("users", "-password")

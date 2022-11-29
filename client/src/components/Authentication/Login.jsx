@@ -20,6 +20,10 @@ const Login = () => {
   const [password, setPassword] = useState();
   const [loading, setLoading] = useState(false);
 
+  function refreshPage() {
+    window.location.reload(false);
+  }
+
   const handleClick = () => setShow(!show);
 
   const submitHandler = async () => {
@@ -36,7 +40,6 @@ const Login = () => {
       return;
     }
 
-    console.log(email, password);
     try {
       const { data } = await axios.post("/api/user/login", {
         email: email,
@@ -51,7 +54,9 @@ const Login = () => {
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
       setLoading(false);
-      history.push("/chats");
+      window.setTimeout(() => {
+        refreshPage();
+      }, 1000);
     } catch (error) {
       toast({
         title: "Login Failed",
